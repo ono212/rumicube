@@ -7,3 +7,4 @@
 ## 📚 함께 읽기
 
 - [Kent C. Dodds - One simple trick to optimize React re-renders](https://kentcdodds.com/blog/optimize-react-re-renders)
+- [codesandbox - state-colocation (문제 해결 단계를 주석으로 작성)](https://codesandbox.io/s/state-colocation-munje-haegyeol-dangyereul-juseogeuro-jagseong-95nnbk)
