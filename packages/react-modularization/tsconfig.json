@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": false,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "lib": ["esnext", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@grepp/career-app-gnb": ["../app-gnb"],
+      "main/StoreUtmValues": ["./src/types/storeUtmValues.d.ts"],
+      "mainGnb/TopNavBar": ["./src/types/topNavBar.d.ts"],
+      "mainGnb/Footer": ["./src/types/footer.d.ts"],
+      "@grepp/shared-services": [""],
+      "vue-router": [""]
+    },
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext"
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}
