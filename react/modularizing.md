@@ -99,6 +99,11 @@ PaymentMethods컴포넌트에서 defaultChecked되어야 하는지 직접 체크
 
 그래서 PaymentMethod 도메인 클래스를 만들어서 도메인 객체를 관리함으로서 도메인 데이터 관련 로직을 분리할 수 있어. 데이터 속성에 직접 접근해서 확인하는 일이 더 이상 PaymentMethods 컴포넌트의 관심사가 아닌 도메인 객체의 관심사로 분리됐어. usePaymentMethods 훅도 더이상 데이터를 변환하는 로직이 자신이 관심사가 아닌 도메인 객체의 관심사로 분리됐어. 이렇게 분리하면 만약 서버 데이터의 key나 value가 바뀌었을 때 PaymentMethod 클래스에서만 수정하면 되기 때문에 유지보수에 용이해지는 장점이 있어.
 
+### 잘 모르겠는 것
+
+- 데이터, 계산, 액션이 무슨 뜻인지 모르겠다.
+- 도메인객체가 뭔지 모르겠다.
+
 ## 📚 함께 읽기
 
 - [velog - [번역] 잘 알려진 UI 패턴을 사용하여 리액트 애플리케이션 모듈화하기](https://velog.io/@eunbinn/modularizing-react-apps#%EC%83%88%EB%A1%9C%EC%9A%B4-%EA%B5%AC%EC%A1%B0%EC%9D%98-%EC%9D%B4%EC%A0%90%EB%93%A4)
