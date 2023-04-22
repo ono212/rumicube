@@ -1,0 +1,16 @@
+.DS_Store
+.idea
+.vscode
+*.local
+*.log
+.eslintcache
+coverage
+dist
+node_modules
+
+# playwright
+storageState.json
+**/playwright-report/
+/test-results/
+/playwright-report/
+/playwright/.cache/

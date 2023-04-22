@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": false,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext"
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}
