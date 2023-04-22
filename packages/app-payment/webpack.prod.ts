@@ -3,18 +3,9 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { resolve } from 'path';
 import { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-import packageJson from './package.json';
 import commonConfig from './webpack.config';
 
 const { WEBPACK_PUBLIC_PATH } = process.env;
-
-export const createVersionSpecificFileName = (fileName: string) => {
-  const { version } = packageJson;
-  const appId = packageJson.name.replace(/^@grepp\//, '');
-  const [head, ...rest] = fileName.split('.');
-
-  return [head, appId, 'v'.concat(version), ...rest].join('.');
-};
 
 export const productionConfig: Configuration = {
   mode: 'production',
