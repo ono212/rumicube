@@ -29,6 +29,10 @@
   - Q. 객체 프로퍼티 앞에 쓰는 `get` 접근자는 뭔가요? - [참고](https://ko.javascript.info/property-accessors)
 - 수업: 리액트 타입스크립트 스토리북 웹팩 바벨 이모션 환경 함께 구축하기 (이어서)
 
+### 2023.04.26.next
+
+- 숙제: [React에 SOLID 원칙 적용하기](https://dev-boku.tistory.com/entry/%EB%B2%88%EC%97%AD-React%EC%97%90-SOLID-%EC%9B%90%EC%B9%99-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0) 모두 읽고 요약하기
+
 later
 
 - 주제: UI 컴포넌트 만들기 시리즈
