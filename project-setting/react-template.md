@@ -1,5 +1,13 @@
 # 리액트 템플릿 만들기
 
+- [01 프로젝트 생성](#01-프로젝트-생성)
+- [02 리액트 및 타입스크립트 설치](#02-리액트-및-타입스크립트-설치)
+- [03 ESLint 설정](#03-eslint-설정)
+- [04 prettier 설정](#04-prettier-설정)
+- [05 Webpack 설정](#05-webpack-설정)
+- [06 React 애플리케이션 추가](#06-react-애플리케이션-추가)
+- [07 테스트 환경 추가](#07-테스트-환경-추가)
+
 ## 01 프로젝트 생성
 
 ```sh
@@ -446,7 +454,7 @@ main();
 
 `/src/mount.tsx`:
 
-```ts
+```tsx
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
@@ -471,19 +479,15 @@ export const mount = () => {
 `/src/App.tsx`:`
 
 ```tsx
-import { useState } from "react";
-
 const App = () => {
-  const [_, rerender] = useState(0);
-
   return (
     <div>
       <h1>This is React app</h1>
 
       <div>
-        <span>See who&apos;s waiting for you:</span>
-        <button type="button" onClick={() => rerender(1)}>
-          Click me
+        <span>See who&apos;s waiting for you </span>
+        <button type="button" onClick={() => window.location.reload()}>
+          😸
         </button>
         <div>
           <img
@@ -505,3 +509,109 @@ export default App;
 ```sh
 npm run dev
 ```
+
+## 07 테스트 환경 추가
+
+테스팅 프레임워크로 [jest](https://jestjs.io/)를 사용하고, react 컴포넌트 테스트를 위해 [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro)를 사용합니다:
+
+```sh
+npm install --save-dev jest jest-environment-jsdom @testing-library/react @testing-library/jest-dom @testing-library/user-event
+```
+
+`jest.config.ts` 추가:
+
+```ts
+import type { Config } from "@jest/types";
+
+const config: Config.InitialOptions = {
+  testEnvironment: "jsdom",
+  setupFilesAfterEnv: ["./jest.setup.ts"],
+};
+
+export default config;
+```
+
+- `testEnvironment`: jest가 테스트를 실행할 환경을 지정합니다. `jsdom`은 브라우저 환경을 모방하는 가상 환경입니다.
+- `setupFilesAfterEnv`: jest가 테스트를 실행하기 전에 실행할 파일을 지정합니다.
+
+> 참고로 default 값을 확인하려면 `npx jest --showConfig` 명령어를 입력합니다.
+
+`jest.setup.ts` 추가:
+
+```ts
+import "@testing-library/jest-dom";
+```
+
+[`@testing-library/jest-dom`](https://www.npmjs.com/package/@testing-library/jest-dom)은 jest에서 DOM 테스트를 위해 필요한 환경을 제공합니다.
+
+`src/App.spec.tsx`: 테스트 파일 작성
+
+```tsx
+import { render, screen } from "@testing-library/react";
+import App from "./App";
+
+describe("App", () => {
+  it("제목을 볼 수 있다.", () => {
+    render(<App />);
+
+    expect(
+      screen.getByRole("heading", { name: "This is React app" })
+    ).toBeInTheDocument();
+  });
+});
+```
+
+`.eslintrc.json`에 테스트 환경에 대한 설정 추가:
+
+```jsonc
+{
+  "root": true,
+  "extends": [
+    "@lighttypes/eslint-config-base",
+    "@lighttypes/eslint-config-import",
+    "@lighttypes/eslint-config-react",
+    "prettier"
+  ],
+  "ignorePatterns": ["coverage", "dist"],
+  "overrides": [
+    {
+      "env": {
+        "jest/globals": true
+      },
+      "extends": ["plugin:jest/recommended"],
+      "excludedFiles": ["**/test/playwright/**/?(*.)+(spec|test).[tj]s?(x)"],
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[tj]s?(x)"
+      ],
+      "plugins": ["jest"]
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "project": ["./tsconfig.json"]
+      }
+    },
+    "react": {
+      "version": "18"
+    }
+  }
+}
+```
+
+테스트 실행:
+
+```sh
+# 파일 경로에 'App'이 포함된 테스트 파일을 실행합니다.
+npm test App
+
+# 파일이 변경될 때마다 테스트를 실행합니다.
+npm test App -- --watch
+
+# 테스트 커버리지를 확인합니다.
+npm test App -- --coverage
+# coverage/lcov-report/index.html 파일을 Show preview로 열면 커버리지 리포트를 확인할 수 있습니다.
+```
+
+> cli 명령어에 대한 설명을 확인하려면 `npx jest --help` 명령어를 입력합니다.
