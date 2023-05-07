@@ -341,8 +341,6 @@ import "webpack-dev-server";
 import { merge } from "webpack-merge";
 import commonConfig from "./webpack.config";
 
-require("dotenv").config({ path: resolve(__dirname, `./.env.local`) });
-
 const developmentConfig: Configuration = {
   mode: "development",
   output: {
@@ -401,7 +399,6 @@ const developmentConfig: Configuration = {
   },
   devServer: {
     historyApiFallback: { index: "/index.html" },
-    port: 9097,
   },
   plugins: [
     new HtmlWebpackPlugin({
