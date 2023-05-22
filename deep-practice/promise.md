@@ -4,6 +4,49 @@ Q. 프라미스가 무엇인가요?
 
 > 프라미스는 자바스크립트의 객체로 비동기 작업을 효율적으로 관리하며 비동기 작업 결과를 처리하기 위해 사용됩니다.
 
+Q. 프라미스는 어떻게 사용하나요?
+
+> 프로미스는 생성자 함수 `new Promise()`를 호출하고 생성자 함수의 인자에 `executor` 함수를 넘기면 됩니다.
+
+```js
+new Promise(executor);
+```
+
+Q. `executor` 함수는 뭐에요?
+
+> `executor` 함수는 말 그대로 "실행자"인데 `new Promise()`를 호출할 때 자동으로 실행되는 함수입니다. 즉 우리가 `new Promise(executor)`를 실행하면 Promise 객체가 만들어지는데 이때 `executor` 함수도 함께 자동으로 실행됩니다. `executor` 함수를 정의하는 방법은 다음과 같습니다:
+
+```js
+let promise = new Promise(function (resolve, reject) {});
+```
+
+> resolve와 reject는 자바스크립트에서 빌트인으로 제공하는 콜백입니다. Promise 객체를 사용하는 이유는 비동기 동작을 하기 위함이고 이 비동기 동작은 성공할 수도 있고 실패할 수도 있습니다. 성공한다면 우리는 성공한 결과 값을 받으면 됩니다. 실패한다면 에러를 핸들링하면 됩니다. 그래서 성공한 값을 받기 위해 `resolve(value)`를 실행하고, 실패한 값을 받기 위해 `reject(error)`를 실행합니다.
+
+```js
+let promise = new Promise(function (resolve, reject) {
+  // 성공했을 경우 resolve 함수에 성공한 결과값을 인자로 넘겨서 호출합니다
+  resolve(value);
+
+  // 실패했을 경우 reject 함수에 에러값을 인자로 넘겨서 호출합니다
+  reject(error);
+});
+```
+
+> 이때 executor 함수는 처리 성공 여부에 따라 자동으로 resolve 함수나 reject 함수를 호출합니다.
+
+(예시) Q. `new Promise()`에 인자로 넘길 executor 함수를 정의하는 예시를 보여주세요.
+
+> 예를 들어, setTimeout으로 1초 후에 "완료"라는 메시지를 전달하고 싶다면 다음과 같이 executor 함수를 정의할 수 있습니다:
+
+```js
+let promise = new Promise(function (resolve, reject) {
+  // 프라미스가 만들어지면 executor 함수는 자동으로 실행됩니다.
+
+  // 1초 뒤에 일이 성공적으로 끝났다는 신호가 전달되면서 result는 '완료'가 됩니다.
+  setTimeout(() => resolve("완료"), 1000);
+});
+```
+
 Q. 프라미스로 어떻게 비동기 처리를 할 수 있나요?
 
 > 먼저 프라미스는 `new Promise(executor)`로 프라미스 객체를 생성할 수 있습니다.
@@ -16,7 +59,23 @@ const getPosts = (url) => {
 };
 ```
 
-> 생성할 때 프라미스 객체의 `state`프로퍼티는 `pending`, `result`프로퍼티는 `undefined`입니다. 그리고 객체를 생성하면서 `executor`라는 실행함수를 인자로 넘깁니다. `executor`는 `new Promise`로 생성할 때 바로 실행됩니다. 이 실행함수에 비동기로 처리할 작업을 작성합니다. 이 실행함수의 구조는 어느정도 정해져있는데 실행함수는 인수로 `resolve`함수와 `reject`함수를 가지고 있습니다. 보통 비동기로 처리할 작업을 작성하고 작업이 성공적으로 처리되면 `resolve`함수를, 작업이 실패하면 `reject`함수를 호출하도록 작성합니다. 호출하면서 인자로 처리 결과를 함께 넘길 수 있습니다.
+> 프로미스 객체는 `state` 프로퍼티와 `result` 프로퍼티를 갖고 있습니다.
+
+```js
+{
+  state: 'pending' | 'fulfilled' | 'rejected'
+  result: undefined | <받은 값>
+}
+```
+
+> 프로미스를 생성할 때는 각 프로퍼티는 어떤 값을 가질까요? 아래와 같습니다:
+
+```ts
+{
+  state: "pending";
+  result: undefined;
+}
+```
 
 ```js
 const getPosts = (url) => {
