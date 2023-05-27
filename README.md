@@ -17,6 +17,13 @@ later
 
 기대하는 완성 모습
 
+### 2023.05.20.next
+
+- 숙제:
+  - [모자튜 프라미스 심층연습 노트 PR 리뷰 반영하기](https://github.com/ono212/rumicube/pull/1)
+  - [모자튜 프라미스 과제](https://ko.javascript.info/promise-basics#tasks) - `deep-practice/promise-tasks.md` 파일로 심층 연습 노트 만들어서 PR 올리기
+  - [모자튜 프라미스 체이닝](https://ko.javascript.info/promise-chaining) - 심층 연습 노트 만들어서 PR 올리기
+
 ### 2023.05.14.next
 
 - 숙제: 모자튜 프라미스를 백지 상태에서 심층연습 노트 작성하기
