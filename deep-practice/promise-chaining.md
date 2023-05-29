@@ -89,7 +89,7 @@ Q. `then`메서드에서 return한 값은 어떻게 다음 `then`메서드에 �
   - `state`: `rejected`, `result`: `반환한 promise의 result`
   - `then`메서드의 두번째 인수(프로미스가 `rejected`되었을 때 실행되는 함수)를 실행합니다.
 - `pending` 상태인 `promise`를 반환하는 경우
-  - `promise`가 처리되기를 (`fulfilled`되거나 `rejected`) 기다렸다가 완료되면 그 `promise`를 반환한다.
+  - `promise`가 처리되기를 (`fulfilled`되거나 `rejected`) 기다렸다가 완료되면 그 `promise`를 반환합니다.
   - `promise` 처리결과에 따라 `then`메서드의 첫번째 인수나 두번째 인수가 실행됩니다.
   - 아래는 예시입니다.
 
@@ -167,3 +167,69 @@ Promise.resolve(1)
 > `setTimeout`을 호출하면 `setTimeout`의 콜백함수는 콜백 큐에 담겨져 대기합니다. 그리고 다음 코드들을 실행합니다. 콜백함수는 콜 스택이 비워진 다음에야 호출됩니다. 그렇기 때문에 콜백함수의 실행을 기다리지 않고 다음 `then`메서드를 실행한 것입니다.
 >
 > `setTimeout`의 콜백함수를 수행한 다음에 이후의 `then`메서드를 순차적으로 실행하고 싶은 경우, `Promise`를 생성하여 내부에서 `setTimeout`을 호출하도록 해야합니다. 이렇게 하면 `Promise`객체는 객체가 처리되길 기다려야하기 때문에 콜백함수에서 모든 동작 이후에 `resolve`를 호출하면 다음 `then`메서드로 넘어갑니다.
+
+Q. 프로미스가 여러 개 있을 경우 실행 순서는 어떻게 되나요?
+
+> 먼저 브라우저 환경에서 어떻게 처리되는지 알아보겠습니다.
+>
+> 브라우저 환경에는 태스크 큐와 마이크로태스크 큐가 있습니다. 태스크 큐에는 비동기함수(ex. `setTimeout`)의 콜백함수가 저장됩니다. 마이크로태스크 큐에는 `Promise`의 콜백함수, `Promise` 후속 처리 메서드(`then`, `catch`, `finally`)의 콜백함수가 저장됩니다. 이벤트루프는 콜스택이 비어있을 때 태스크 큐와 마이크로태스크 큐를 확인하여 대기하고 있는 함수를 확인하여 콜스택에 넣어 실행시킵니다. 이 때 이벤트루프가 콜스택에 어떤 함수를 우선적으로 넣을지 선택하는 기준이 있습니다. 먼저 마이크로태스크 큐는 태스크 큐보다 처리되는 우선순위가 높습니다. 그렇기 때문에 이벤트루프는 태스크 큐에도 대기중인 함수들이 있고 마이크로태스크 큐에도 대기중인 함수들이 있을 때, 마이크로태스크 큐의 함수부터 우선적으로 콜스택에 넣습니다. 마이크로태스크 큐가 비면 태스크 큐에 대기하고 있는 함수들을 콜스택에 넣고 실행합니다. 그래서 마이크로태스크 큐 → 태스크 큐 순서로 실행됨을 알 수 있습니다.
+
+예시 코드를 통해 알아보겠습니다.
+
+```js
+const promise1 = () => {
+  return new Promise((resolve, reject) => {
+    console.log("promise1");
+    resolve();
+  });
+};
+
+const promise2 = () => {
+  return new Promise((resolve, reject) => {
+    console.log("promise2");
+    setTimeout(() => {
+      console.log("promise -> setTimeout");
+      resolve();
+    }, 0);
+  });
+};
+
+const promise3 = () => {
+  return new Promise((resolve, reject) => {
+    console.log("promise3");
+    reject();
+  });
+};
+
+console.log("promise 전"); // (*)
+setTimeout(() => console.log("promise 전에 호출한 setTimeout"), 0); // (**)
+promise1().then(() => console.log("promise1 -> then")); // (***)
+promise2().then(() => console.log("promise2 -> setTimeout -> then")); // (****)
+promise3().catch(() => console.log("promise3 -> catch")); // (*****)
+console.log("promise 이후"); // (******)
+```
+
+> 실행 결과
+
+```js
+promise 전
+promise1
+promise2
+promise3
+promise 이후
+promise1 -> then
+promise3 -> catch
+promise 전에 호출한 setTimeout
+promise2 -> setTimeout
+promise2 -> setTimeout -> then
+```
+
+> 실행 결과를 통해 알 수 있는 것은
+>
+> 1. `setTimeout`의 콜백함수(\*\*)는 프로미스와 후속메서드들을 실행한 이후에 실행되었습니다.
+> 2. 어떤 프로미스를 실행한다고 해서 체인으로 연결된 후속메서드들 또한 바로 실행되는 것이 아니라 뒤의 프로미스들을 먼저 실행하는 것을 알 수 있습니다.
+> 3. 내부에 `setTimout`을 호출한 프로미스의 실행 순서가 다른 프로미스들의 후속 처리 메서드들을 실행한 후에 실행된 것을 알 수 있습니다. 프로미스 내부에서 실행되었더라도 `setTimeout`의 콜백함수는 태스크 큐에 담기기 때문입니다.
+>
+> 실행 결과가 이렇게 된 것은 마이크로태스크 큐의 우선순위가 태스크 큐보다 높기 때문입니다. 또한 후속처리메서드들의 콜백함수는 바로 실행되는 것이 아니라 마이크로태스큐에서 대기합니다. 콜스택이 비어있을 때 마이크로태스크 큐를 확인하여 작업이 있을 경우 콜스택에 넣어 함수를 실행합니다. 마이크로태스크 큐도 비어져있다면 태스크 큐를 확인하여 작업이 있을 경우 콜스택에 넣어 함수를 실행합니다.
+>
+> 즉, 동기 코드들과 `Promise` 생성 코드를 실행 → `Promise`의 후속 처리 메서드의 콜백함수 실행 → `setTimeout`의 콜백함수를 실행하는 것을 알 수 있습니다.
