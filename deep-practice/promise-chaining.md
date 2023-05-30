@@ -233,3 +233,45 @@ promise2 -> setTimeout -> then
 > 실행 결과가 이렇게 된 것은 마이크로태스크 큐의 우선순위가 태스크 큐보다 높기 때문입니다. 또한 후속처리메서드들의 콜백함수는 바로 실행되는 것이 아니라 마이크로태스큐에서 대기합니다. 콜스택이 비어있을 때 마이크로태스크 큐를 확인하여 작업이 있을 경우 콜스택에 넣어 함수를 실행합니다. 마이크로태스크 큐도 비어져있다면 태스크 큐를 확인하여 작업이 있을 경우 콜스택에 넣어 함수를 실행합니다.
 >
 > 즉, 동기 코드들과 `Promise` 생성 코드를 실행 → `Promise`의 후속 처리 메서드의 콜백함수 실행 → `setTimeout`의 콜백함수를 실행하는 것을 알 수 있습니다.
+
+Q. 콜백함수를 이용한 비동기 처리 방식과 비교했을 때 프로미스 체이닝은 어떤 장점이 있나요?
+
+> 콜백 헬이 발생하지 않습니다.
+>
+> 프로미스 체이닝은 콜백함수를 첨부하는 방식입니다. 그래서 코드가 중첩되지 않기 때문에 콜백 헬이 발생하지 않습니다. 비동기 동작을 추가해도 아래로 코드가 길어질 뿐 오른쪽으로 코드가 깊어지지 않습니다.
+
+> 에러 핸들링이 간편합니다.
+>
+> 콜백함수를 이용해서 비동기 처리를 할 경우, 에러를 핸들링하기 위한 코드를 매번 다음 콜백함수로 계속해서 전달해줘야 했습니다. 하지만 프로미스 체이닝을 이용하면 중복적으로 에러 핸들링을 하지 않아도 된다는 장점이 있습니다. 에러가 발생하면 체인 아래의 `catch`를 찾기 때문에 이 특성을 사용하면 중복으로 에러 핸들링을 하지 않아도 됩니다. 아래는 콜백 기반으로 처리할 경우의 예시입니다.
+
+```js
+doSomething(function (result) {
+  doSomethingElse(
+    result,
+    function (newResult) {
+      doThirdThing(
+        newResult,
+        function (finalResult) {
+          console.log("Got the final result: " + finalResult);
+        },
+        failureCallback
+      );
+    },
+    failureCallback
+  );
+}, failureCallback);
+```
+
+> 콜백기반으로 비동기 처리를 할 경우 에러처리콜백을 매번 전달해주는 것을 알 수 있습니다.
+
+> 아래는 프로미스로 처리할 경우의 예시입니다.
+
+```js
+doSomething() // *
+  .then((result) => doSomethingElse(result)) // **
+  .then((newResult) => doThirdThing(newResult)) // ***
+  .then((finalResult) => console.log(`Got the final result: ${finalResult}`)) // ****
+  .catch(failureCallback);
+```
+
+> \*~ \*\*\*\*에 대한 에러 핸들링 코드가 동일하다면 위의 예시처럼 `catch`를 뒤에 한번만 위치시키면 에러를 처리할 수 있습니다.
