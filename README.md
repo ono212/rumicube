@@ -17,6 +17,13 @@ later
 
 기대하는 완성 모습
 
+### 2023.06.03.next
+
+- 숙제:
+  - [모자튜 프라미스 심층연습 노트 PR 완성하기 - 프로미스 에러 핸들링](https://github.com/ono212/rumicube/pull/4#event-9417792039)
+  - 모자튜 이어서 매일 읽고 심층 연습 노트 PR 만들기
+  - [TDD with React 강의](https://icodeit.thinkific.com/courses/test-driven-development-with-react) 듣고 심층 연습 노트 PR 만들기 - Local enviroment setting up 까지
+
 ### 2023.05.20.next
 
 - 숙제:
