@@ -17,6 +17,13 @@ later
 
 기대하는 완성 모습
 
+### 2023.06.10.next
+
+- 숙제:
+  - [모자튜 프라미스 심층연습 노트 PR 완성하기 - 프로미스 API](https://ko.javascript.info/promise-api)
+  - 모자튜 이어서 매일 읽고 심층 연습 노트 PR 만들기 (스토리텔링, 이유와 언제 사용해야 하는지부터 이야기 시작하기)
+  - [TDD with React 강의](https://icodeit.thinkific.com/courses/test-driven-development-with-react) 듣고 심층 연습 노트 PR 만들기 - Local enviroment setting up (포함)까지
+
 ### 2023.06.03.next
 
 - 숙제:
