@@ -1,4 +1,4 @@
-# 프로미스와 에러 핸들링 과제
+[프로미스와 에러 핸들링 과제](https://ko.javascript.info/promise-error-handling#tasks)
 
 ## 1. `setTimeout`에서 `throw error`를 할 경우 어떻게 될까?
 
