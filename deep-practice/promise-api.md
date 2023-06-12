@@ -1,4 +1,4 @@
-# Promise API
+# [Promise API](https://ko.javascript.info/promise-api)
 
 `Promise`클래스에는 5개의 정적 메서드(`Promise.all`, `Promise.allSettled`, `Promise.race`, `Promise.resolve`, `Promise.reject`)가 있는데 이에 대해 차례대로 알아보겠습니다.
 
@@ -116,4 +116,127 @@ the stack is now empty
 Promise { <state>: "fulfilled", <value>: Array[2] }
 ```
 
-> p`는 동기적으로 즉시 이행되어 `console`문에서 `fulfilled`된 `promise`가 출력되는 것을 확인할 수 있습니다. 그와 달리 `p2`는 비동기적으로 실행되기 때문에 `console`문에서는 아직 `pending`상태로 출력이 됩니다. 그 후에 `setTimeout`의 콜백함수에서 실행한 `console`문에서는 `fulfilled`된 상태인 `promise`가 출력되는 것을 볼 수 있습니다.
+> `p`는 동기적으로 즉시 이행되어 `console`문에서 `fulfilled`된 `promise`가 출력되는 것을 확인할 수 있습니다. 그와 달리 `p2`는 비동기적으로 실행되기 때문에 `console`문에서는 아직 `pending`상태로 출력이 됩니다. 그 후에 `setTimeout`의 콜백함수에서 실행한 `console`문에서는 `fulfilled`된 상태인 `promise`가 출력되는 것을 볼 수 있습니다.
+
+Q. 에러가 발생하거나 프로미스가 `rejected`되면 어떻게 되나요?
+
+> `Promise.all`은 즉시 거부하는 프로미스를 반환합니다. 이미 정상적으로 이행되어서 저장된 다른 프로미스의 결과가 있더라도 완전히 무시되어 결과값을 반환하지 않습니다.
+
+Q. `Promise.allSettled`는 무엇인가요?
+
+> `Promise.allSettled`는 프로미스 배열을 인자로 받습니다. 그리고 모든 프로미스가 `settled`될 때까지(이행되든 거부되든) 기다립니다. 기다렸다가 각각 프로미스의 상태와 값 또는 에러를 반환합니다. 즉, 여러 개의 프로미스의 결과를 기다렸다가 한번에 반환하는 메서드입니다.
+
+Q. `Promise.allSettled`는 주로 어떤 상황에 사용하나요?
+
+> 여러 비동기 작업을 실행하여 그 결과값이 필요한 상황에서, 모든 프로미스가 꼭 이행되지 않아도 되는 상황에서 사용합니다. `Promise.allSettled`는 `Promise.all`과는 달리 어떤 프로미스가 거부되어도 이어서 나머지 프로미스를 처리하기 때문입니다.
+
+Q. `Promise.allSettled`는 어떤 값을 반환하나요?
+
+> 이행된 새로운 프로미스를 반환합니다. 이 때 `result`프로퍼티는 인자로 받은 프로미스들의 처리 결과를 배열로 가지고 있습니다. 그 배열은 다음과 같은 요소를 가집니다.
+>
+> 각 프로미스는 성공적으로 이행됐을 경우에는 `{ status: "fulfilled", value: result }`
+>
+> 거부됐을 경우에는 `{ status: "rejected", reason: error}` 를 반환합니다.
+>
+> 즉 상태와 함께, 이행됐을 때는 `value`로 그 결과값을, 거부됐을 때는 `reason`프로퍼티에 `reject`를 호출하면서 넘긴 인자를 가지는 객체를 반환합니다.
+>
+> 아래는 예시 코드입니다.
+
+```js
+Promise.allSettled([
+  Promise.resolve(33),
+  new Promise((resolve) => setTimeout(() => resolve(66), 0)),
+  99,
+  Promise.reject(new Error("an error")),
+]).then((values) => console.log(values));
+```
+
+> 실행 결과
+
+```js
+[
+   {status: "fulfilled", value: 33},
+   {status: "fulfilled", value: 66},
+   {status: "fulfilled", value: 99},
+   {status: "rejected",  reason: Error: an error}
+]
+```
+
+Q. `Promise.race`는 무엇인가요?
+
+> 프로미스 배열을 인자로 받아 가장 먼저 `settled`되는 프로미스의 결과(이행된 결과값 혹은 에러)를 반환합니다.
+
+```js
+Promise.race([
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((resolve, reject) =>
+    setTimeout(() => reject(new Error("에러 발생!")), 2000)
+  ),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000)),
+]).then(alert); // 1
+```
+
+> 첫번째 프로미스가 가장 먼저 처리되기 때문에 `Promise.race`는 1을 반환합니다.
+
+Q. `Promise.race`는 주로 어떤 상황에 사용하나요?
+
+> 여러 개의 프로미스들 중에서 가장 먼저 상태가 결정되는 프로미스의 결과를 반환하고 싶을 때 사용됩니다.
+
+Q. `Promise.resolve`는 무엇인가요?
+
+> 인자로 받은 값으로 결과값을 가지는 이행된 프로미스를 반환하는 메서드입니다. 즉 어떤 프로미스를 이행된 상태로 만드는 메서드입니다.
+
+```js
+Promise.resolve("ABC D").then((value) => console.log(value));
+```
+
+> 실행 결과
+
+```js
+ABC D
+```
+
+Q. `Promise.resolve`는 주로 어떤 상황에 사용하나요?
+
+> 호환성을 위해서 함수가 프로미스를 반환하도록 해야할 때 사용할 수 있습니다.
+
+```js
+let cache = new Map();
+
+function loadCached(url) {
+  if (cache.has(url)) {
+    return Promise.resolve(cache.get(url)); // (*)
+  }
+
+  return fetch(url)
+    .then((response) => response.text())
+    .then((text) => {
+      cache.set(url, text);
+      return text;
+    });
+}
+```
+
+> `loadCached`함수는 `url`이 캐시에 저장돼 있을 경우에는 저장된 캐시값을 사용합니다. 이 때 `loadCached`함수가 항상 프로미스를 반환한다면 `loadCached`함수는 `then`과 같은 후속처리메서드를 사용할 수 있습니다. 그래서 캐시에서 값을 꺼내 사용할 때에도 프로미스가 반환되는 것을 보장하기 위해서 `Promise.resolve`로 값을 감싸서 프로미스로 만들어서 반환하고 있는 것입니다.
+
+Q. `Promise.reject`는 무엇인가요?
+
+> `Promise.reject`는 인자로 프로미스가 `rejected`된 이유를 받습니다. 그 이유를 결과값으로 가지는 `rejected`상태인 프로미스를 반환합니다. 즉 어떤 프로미스를 `rejected`상태로 만드는 메서드입니다.
+
+```js
+Promise.reject("Testing static reject").then(
+  function (result) {
+    // 프로미스가 rejected상태이므로 실행되지 않습니다.
+    console.log(result);
+  },
+  function (reason) {
+    console.log(reason);
+  }
+);
+```
+
+> 실행 결과
+
+```js
+Testing static reject
+```
