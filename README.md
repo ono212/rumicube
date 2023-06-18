@@ -17,6 +17,16 @@ later
 
 기대하는 완성 모습
 
+### 2023.06.18.next
+
+- 숙제:
+  - [모자튜 프라미스 심층연습 노트 PR 완성하기 - 이벤트 루프와 매크로태스크, 마이크로태스크](https://ko.javascript.info/event-loop)
+  - 모자튜 이어서 매일 읽고 심층 연습 노트 PR 만들기 (스토리텔링, 이유와 언제 사용해야 하는지부터 이야기 시작하기)
+  - [Mastering Maintainable React](https://www.udemy.com/course/mastering-maintainable-react/): 섹션 2까지 듣고 새로 배운 내용 Let's Align on some fundamentals
+- 수업:
+  - [모자튜 - 프라미스화](https://ko.javascript.info/promisify) 같이 보면서 이해하기
+  - [프로그래머스 2023 FE 데브매칭](https://career.programmers.co.kr/competitions/3387) 문제 나오면 같이 풀어보기
+
 ### 2023.06.10.next
 
 - 숙제:
