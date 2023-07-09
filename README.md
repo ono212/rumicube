@@ -17,6 +17,17 @@ later
 
 기대하는 완성 모습
 
+### 2023.07.09.next
+
+- 숙제:
+  - 지원할 곳 찾기 - 중하 티어 공고 (React 아니라 Vue여도)
+  - [모자튜 심층연습 노트 PR 올리기 - getElement, querySelector로 요소 검색하기](https://ko.javascript.info/searching-elements-dom)
+  - [Mastering Maintainable React](https://www.udemy.com/course/mastering-maintainable-react/): 섹션 5까지 듣고 정리하고 PR 올리기
+- 수업:
+  - [모자튜 - 프라미스화](https://ko.javascript.info/promisify) 같이 보면서 이해하기
+  - [모자튜 - 이벤트 루프와 태스크](https://ko.javascript.info/event-loop#ref-59) 같이 보면서 이해하기 (w/ 명세서, 댓글에 있는 참고 자료들)
+  - [프로그래머스 2023 FE 데브매칭](https://career.programmers.co.kr/competitions/3387) 문제 나오면 같이 풀어보기
+
 ### 2023.07.01.next
 
 - 숙제:
