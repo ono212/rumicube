@@ -35,6 +35,19 @@ Q. 클래스 이름은 어떻게 확인할 수 있나요?
 alert(document.body.constructor.name); // HTMLBodyElement
 ```
 
+> `toString`으로도 확인할 수 있습니다.
+
+```html
+<body>
+  <div id="div1">div 태그</div>
+
+  <script>
+    console.log(document.body.toString()); // [object HTMLBodyElement]
+    console.log(div1.toString()); // [object HTMLDivElement]
+  </script>
+</body>
+```
+
 > `instanceof`로도 클래스 이름을 확인할 수 있습니다. `instanceof`는 상속 여부를 알려주는 연산자입니다.
 
 ```js
@@ -121,11 +134,12 @@ Q. `innerHTML`은 무엇인가요?
 
     div.innerHTML = "<h1>새로운 div!</h1>"; // 교체
     console.log(div.innerHTML); // "<h1>새로운 div!</h1>"
+    console.log(document.body.innerHTML); // "<div><h1>새로운 div!</h1></div> ..."
   </script>
 </body>
 ```
 
-> 예시코드를 실행하면 페이지에 `<h1>`으로 “새로운 div!”가 표시된 것을 확인할 수 있습니다.
+> 예시코드를 실행하면 페이지에 `<h1>`으로 “새로운 div!”가 표시된 것을 확인할 수 있습니다. 기존의 `div`태그는 사라지지 않습니다. `div`태그 내부에 `h1`태그가 삽입된 것입니다.
 
 Q. `innerHTML`로 값을 할당할 때 `script`태그가 포함되어 있으면 어떻게 되나요?
 
@@ -253,7 +267,7 @@ Q. 다른 유용한 프로퍼티는 어떤 게 있나요?
   - 요소를 숨기도록 지정할 수 있는 프로퍼티입니다.
   - `true`일 때는 숨기고 `false`일 때는 숨긴 요소를 다시 보여줍니다.
   - `style="display: none"`과 동일한 효과입니다.
-  - 아래는 setInterval을 사용하여 요소를 깜빡이도록 구현한 예제입니다.
+  - 아래는 `setInterval`을 사용하여 요소를 깜빡이도록 구현한 예제입니다.
 
     ```html
     <div id="elem">깜빡이는 요소</div>
